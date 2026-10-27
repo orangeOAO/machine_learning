@@ -1,0 +1,42 @@
+[
+  {
+    "kind": "all_correct",
+    "file": "all_correct_metal_metal392.jpg",
+    "actual": "metal",
+    "cnn": "metal",
+    "resnet18": "metal",
+    "dnn_tc": "metal"
+  },
+  {
+    "kind": "resnet_only_correct",
+    "file": "resnet_only_correct_plastic_plastic410.jpg",
+    "actual": "plastic",
+    "cnn": "paper",
+    "resnet18": "plastic",
+    "dnn_tc": "plastic"
+  },
+  {
+    "kind": "resnet_wrong",
+    "file": "resnet_wrong_glass_glass314.jpg",
+    "actual": "glass",
+    "cnn": "glass",
+    "resnet18": "metal",
+    "dnn_tc": "glass"
+  },
+  {
+    "kind": "dnntc_correct_others_wrong",
+    "file": "dnntc_correct_others_wrong_glass_glass314.jpg",
+    "actual": "glass",
+    "cnn": "glass",
+    "resnet18": "metal",
+    "dnn_tc": "glass"
+  },
+  {
+    "kind": "dnntc_wrong",
+    "file": "dnntc_wrong_glass_glass404.jpg",
+    "actual": "glass",
+    "cnn": "paper",
+    "resnet18": "metal",
+    "dnn_tc": "plastic"
+  }
+]

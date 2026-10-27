@@ -1,3 +1,6 @@
 .venv/
 __pycache__/
 *.pyc
+/driving_output/
+data/*
+.venv-gpu/
