@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DEMO</title>
+
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body><header><div class="brand">TRASH CLASSIFIER</div></header>
+<main><section class="hero"><div><div class="eyebrow">IMAGE CLASSIFICATION</div><h1>同一張圖片，兩個模型的答案</h1><p>上傳一張圖片，觀察從頭訓練與預訓練微調的辨識差異。</p></div><div class="spec">共同輸入　224 × 224<br>訓練輪數　25 epochs<br>分類範圍　6 種垃圾</div></section>
+<div class="workspace"><section class="upload"><div class="section-title"><h2>選擇測試圖片</h2><span class="step">01 / 上傳</span></div>
+<input id="file" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+<div id="drop" class="drop" role="button" tabindex="0" aria-label="選擇或拖曳圖片"><div id="empty" class="empty"><div class="symbol" aria-hidden="true">＋</div><b>拖曳圖片到這裡</b><small>或點選選擇檔案</small><small>JPG、PNG、WebP · 上限 8 MB</small></div><img id="preview" alt="選取圖片的預覽" hidden></div>
+<p id="filename">選擇只有一個主要物件的照片，效果較容易觀察。</p><div class="actions"><button id="clear" disabled>清除</button><button class="primary" id="go" disabled>比較兩個模型</button></div>
+<div class="samples"><p>也可以使用已保留的測試集範例：</p><div class="sample-buttons" id="samples"></div></div></section>
+<section class="results"><div class="section-title"><h2>模型預測</h2><span class="step">02 / 比較</span></div><div class="result-grid">
+<article class="model" id="cnn224"><h3>CNN 224</h3><div class="method">自訂卷積網路，從頭訓練</div><div class="prediction">等待圖片</div><div class="score">尚未開始預測</div><div class="bars"><div class="placeholder">預測完成後，將顯示<br>六個類別的模型分數。</div></div><div class="metrics">正在讀取模型資料…</div></article>
+<article class="model resnet" id="resnet101"><h3>ResNet101</h3><div class="method">ImageNet 預訓練，全模型微調</div><div class="prediction">等待圖片</div><div class="score">尚未開始預測</div><div class="bars"><div class="placeholder">預測完成後，將顯示<br>六個類別的模型分數。</div></div><div class="metrics">正在讀取模型資料…</div></article></div>
+<div id="status" class="status" role="status" aria-live="polite">正在連接本機模型…</div></section>
+<aside class="video-panel" aria-label="cute doro">
+  <video autoplay muted loop playsinline controls preload="metadata">
+    <source src="/doro.mp4" type="video/mp4">
+    您的瀏覽器不支援 MP4 影片播放。
+  </video>
+  <p class="video-caption">cute doro</p>
+</aside>
+</div>
+<p class="note">兩個模型使用相同的 224 × 224 前處理，圖片只傳到這台電腦的 localhost 伺服器。分數為未經校準的 softmax 輸出，不等於正確機率。<br>模型會在紙板、玻璃、金屬、紙張、塑膠、其他垃圾中選擇一類，無法辨識所有未知物品。顯示的測試 accuracy 為 379 張保留圖片的整體成績，與目前上傳圖片的分數不同。</p></main>
+<script>
+const $=s=>document.querySelector(s);let selected=null,previewURL=null,ready=false,busy=false,meta=[],version=0;
+const status=(message,error=false)=>{$('#status').textContent=message;$('#status').classList.toggle('error',error)};
+function controls(){ $('#go').disabled=!ready||!selected||busy;$('#clear').disabled=!selected||busy;$('#file').disabled=busy;document.querySelectorAll('#samples button').forEach(b=>b.disabled=busy);$('#drop').setAttribute('aria-disabled',String(busy));}
+function resetResults(){for(const m of ['cnn224','resnet101']){let card=$('#'+m);card.querySelector('.prediction').textContent='等待圖片';card.querySelector('.score').textContent='尚未開始預測';card.querySelector('.bars').replaceChildren();}}
+function choose(blob,name){version++;selected=null;resetResults();if(previewURL)URL.revokeObjectURL(previewURL);previewURL=null;$('#preview').hidden=true;$('#empty').hidden=false;if(!blob||blob.size>8*1024*1024||!['image/jpeg','image/png','image/webp'].includes(blob.type)){status('請使用 8 MB 以內的 JPG、PNG 或 WebP 圖片。',true);$('#filename').textContent='尚未選擇圖片';controls();return;}selected=blob;previewURL=URL.createObjectURL(blob);$('#preview').src=previewURL;$('#preview').hidden=false;$('#empty').hidden=true;$('#filename').textContent=name;status('圖片已載入，按「比較兩個模型」開始。');controls();}
+$('#drop').onclick=()=>{if(!busy)$('#file').click()};$('#drop').onkeydown=e=>{if(['Enter',' '].includes(e.key)){e.preventDefault();if(!busy)$('#file').click()}};$('#file').onchange=()=>{if($('#file').files[0])choose($('#file').files[0],$('#file').files[0].name)};
+$('#drop').ondragover=e=>{e.preventDefault();if(!busy)$('#drop').classList.add('drag')};$('#drop').ondragleave=()=>$('#drop').classList.remove('drag');$('#drop').ondrop=e=>{e.preventDefault();$('#drop').classList.remove('drag');if(!busy&&e.dataTransfer.files[0])choose(e.dataTransfer.files[0],e.dataTransfer.files[0].name)};
+$('#clear').onclick=()=>{version++;selected=null;if(previewURL)URL.revokeObjectURL(previewURL);previewURL=null;$('#file').value='';$('#preview').removeAttribute('src');$('#preview').hidden=true;$('#empty').hidden=false;$('#filename').textContent='選擇只有一個主要物件的照片，效果較容易觀察。';resetResults();status('已清除圖片，可以開始下一次比較。');controls()};
+$('#go').onclick=async()=>{if(!selected||busy)return;busy=true;controls();resetResults();status('兩個模型正在分析同一張圖片…');const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),90000);try{const r=await fetch('/api/predict',{method:'POST',headers:{'Content-Type':selected.type},body:selected,signal:controller.signal});const j=await r.json();if(!r.ok)throw Error(j.error);for(const m of j.results){const card=$('#'+m.id);card.querySelector('.prediction').textContent=m.scores[0].label;const score=card.querySelector('.score');score.replaceChildren();let strong=document.createElement('strong');strong.textContent=(m.scores[0].score*100).toFixed(1)+'%';score.append(strong,document.createTextNode(' 模型分數'));for(const item of m.scores){const row=document.createElement('div');row.className='class-row';const label=document.createElement('div');label.className='class-label';const name=document.createElement('span'),value=document.createElement('span');name.textContent=item.label;value.textContent=(item.score*100).toFixed(1)+'%';label.append(name,value);const progress=document.createElement('progress');progress.max=1;progress.value=item.score;progress.setAttribute('aria-label',item.label+' '+value.textContent);row.append(label,progress);card.querySelector('.bars').append(row);}card.querySelector('.metrics').textContent='保留測試集 accuracy '+(m.accuracy*100).toFixed(2)+'%\n最佳模型：第 '+m.best_epoch+' 輪　推論 '+Math.round(m.elapsed_ms)+' ms';card.querySelector('.metrics').style.whiteSpace='pre-line';}status((j.agreement?'兩個模型的第一名預測一致。':'兩個模型的第一名預測不同，可以比較各類分數。')+' 原圖 '+j.image_size.join(' × ')+'，模型輸入 224 × 224。');}catch(e){status(e.name==='AbortError'?'推論逾時，請稍後重試。':e.message,true);}finally{clearTimeout(timer);busy=false;controls()}};
+async function init(){try{const r=await fetch('/api/info');if(!r.ok)throw Error('無法連接模型');const j=await r.json();meta=j.models;for(const m of meta)$('#'+m.id+' .metrics').textContent='保留測試集 accuracy '+(m.accuracy*100).toFixed(2)+'% · 最佳第 '+m.best_epoch+' 輪';for(const s of j.samples){const b=document.createElement('button');b.textContent=s.label;b.onclick=async()=>{if(busy)return;busy=true;controls();status('正在載入測試集範例…');try{const r=await fetch('/api/sample?id='+s.id);if(!r.ok)throw Error('範例載入失敗');choose(await r.blob(),'測試集範例：'+s.label);}catch(e){status(e.message,true)}finally{busy=false;controls()}};$('#samples').append(b)}ready=true;status('兩個模型已就緒。選擇圖片或點選測試集範例。');controls();}catch(e){status('本機服務尚未就緒，請重新整理頁面。',true)}}init();
+</script></body></html>

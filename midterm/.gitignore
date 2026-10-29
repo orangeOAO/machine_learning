@@ -1,3 +1,7 @@
 data/
 outputs/
 __pycache__/
+*.pth
+.ppt_batch_update/
+deliverables/
+*.pptx

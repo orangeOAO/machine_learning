@@ -1,0 +1,129 @@
+{
+  "accuracy": 0.899736147757256,
+  "macro_f1": 0.8694061670909231,
+  "loss": 0.3346490614130936,
+  "best_epoch": 10,
+  "best_val_loss": 0.3594277171151979,
+  "best_val_accuracy": 0.9074074074074074,
+  "classification_report": {
+    "cardboard": {
+      "precision": 0.9365079365079365,
+      "recall": 0.9672131147540983,
+      "f1-score": 0.9516129032258065,
+      "support": 61.0
+    },
+    "glass": {
+      "precision": 0.8690476190476191,
+      "recall": 0.9733333333333334,
+      "f1-score": 0.9182389937106918,
+      "support": 75.0
+    },
+    "metal": {
+      "precision": 0.8793103448275862,
+      "recall": 0.8225806451612904,
+      "f1-score": 0.85,
+      "support": 62.0
+    },
+    "paper": {
+      "precision": 0.9418604651162791,
+      "recall": 0.9101123595505618,
+      "f1-score": 0.9257142857142857,
+      "support": 89.0
+    },
+    "plastic": {
+      "precision": 0.9692307692307692,
+      "recall": 0.875,
+      "f1-score": 0.9197080291970803,
+      "support": 72.0
+    },
+    "trash": {
+      "precision": 0.6086956521739131,
+      "recall": 0.7,
+      "f1-score": 0.6511627906976745,
+      "support": 20.0
+    },
+    "accuracy": 0.899736147757256,
+    "macro avg": {
+      "precision": 0.8674421311506838,
+      "recall": 0.8747065754665474,
+      "f1-score": 0.8694061670909231,
+      "support": 379.0
+    },
+    "weighted avg": {
+      "precision": 0.9039760072778584,
+      "recall": 0.899736147757256,
+      "f1-score": 0.9003881714242501,
+      "support": 379.0
+    }
+  },
+  "confusion_matrix": [
+    [
+      59,
+      0,
+      0,
+      2,
+      0,
+      0
+    ],
+    [
+      0,
+      73,
+      2,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      5,
+      51,
+      2,
+      1,
+      3
+    ],
+    [
+      3,
+      1,
+      1,
+      81,
+      0,
+      3
+    ],
+    [
+      0,
+      4,
+      2,
+      0,
+      63,
+      3
+    ],
+    [
+      1,
+      1,
+      2,
+      1,
+      1,
+      14
+    ]
+  ],
+  "config": {
+    "data_dir": "data/dataset-resized",
+    "split_file": "data/splits.json",
+    "out_dir": "result/resnet101_finetune",
+    "epochs": 10,
+    "batch_size": 8,
+    "lr": 0.0001,
+    "model": "resnet101"
+  },
+  "seed": 42,
+  "split_sizes": {
+    "train": 1764,
+    "val": 378,
+    "test": 379
+  },
+  "device": "cuda",
+  "input_size": [
+    224,
+    224
+  ]
+}

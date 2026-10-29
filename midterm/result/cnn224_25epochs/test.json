@@ -1,0 +1,133 @@
+{
+  "accuracy": 0.7044854881266491,
+  "macro_f1": 0.6434497199821491,
+  "loss": 0.9261181142210646,
+  "best_epoch": 25,
+  "best_val_loss": 0.9187879231241014,
+  "best_val_accuracy": 0.6693121693121693,
+  "classification_report": {
+    "cardboard": {
+      "precision": 0.8596491228070176,
+      "recall": 0.8032786885245902,
+      "f1-score": 0.8305084745762712,
+      "support": 61.0
+    },
+    "glass": {
+      "precision": 0.625,
+      "recall": 0.6666666666666666,
+      "f1-score": 0.6451612903225806,
+      "support": 75.0
+    },
+    "metal": {
+      "precision": 0.6166666666666667,
+      "recall": 0.5967741935483871,
+      "f1-score": 0.6065573770491803,
+      "support": 62.0
+    },
+    "paper": {
+      "precision": 0.7117117117117117,
+      "recall": 0.8876404494382022,
+      "f1-score": 0.79,
+      "support": 89.0
+    },
+    "plastic": {
+      "precision": 0.7868852459016393,
+      "recall": 0.6666666666666666,
+      "f1-score": 0.7218045112781954,
+      "support": 72.0
+    },
+    "trash": {
+      "precision": 0.4,
+      "recall": 0.2,
+      "f1-score": 0.26666666666666666,
+      "support": 20.0
+    },
+    "accuracy": 0.7044854881266491,
+    "macro avg": {
+      "precision": 0.6666521245145058,
+      "recall": 0.6368377774740855,
+      "f1-score": 0.6434497199821491,
+      "support": 379.0
+    },
+    "weighted avg": {
+      "precision": 0.7006464640417461,
+      "recall": 0.7044854881266491,
+      "f1-score": 0.6972768581682286,
+      "support": 379.0
+    }
+  },
+  "confusion_matrix": [
+    [
+      49,
+      5,
+      1,
+      6,
+      0,
+      0
+    ],
+    [
+      0,
+      50,
+      13,
+      7,
+      4,
+      1
+    ],
+    [
+      3,
+      10,
+      37,
+      7,
+      4,
+      1
+    ],
+    [
+      0,
+      3,
+      3,
+      79,
+      3,
+      1
+    ],
+    [
+      2,
+      7,
+      4,
+      8,
+      48,
+      3
+    ],
+    [
+      3,
+      5,
+      2,
+      4,
+      2,
+      4
+    ]
+  ],
+  "config": {
+    "data_dir": "data/dataset-resized",
+    "split_file": "data/splits.json",
+    "out_dir": "result/cnn224_25epochs",
+    "epochs": 25,
+    "batch_size": 64,
+    "lr": 0.001,
+    "model": "cnn"
+  },
+  "seed": 42,
+  "split_sizes": {
+    "train": 1764,
+    "val": 378,
+    "test": 379
+  },
+  "device": "cuda",
+  "input_size": [
+    224,
+    224
+  ],
+  "architecture": "CNN224",
+  "normalization": "imagenet",
+  "eval_resize": 232,
+  "eval_crop": 224
+}
